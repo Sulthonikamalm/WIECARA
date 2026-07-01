@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <link rel="icon" type="image/png" href="../Gambar/favicon.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WIECARA Emergency Command</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="emergency.css">
+</head>
+<body>
+  <main class="dashboard-shell">
+    <section class="activation-screen" id="activationScreen">
+      <div class="activation-layout">
+        <div class="activation-copy-block">
+          <div class="agency-mark">
+            <span class="agency-light"></span>
+            <span>WIECARA Emergency Command</span>
+          </div>
+          <h1>Ruang siaga untuk respons darurat.</h1>
+          <p>
+            Dashboard ini disiapkan untuk petugas polisi, damkar, dan responder internal agar kasus HIGH RISK dari ARA langsung terlihat, berbunyi, dan siap ditindaklanjuti.
+          </p>
+        </div>
+
+        <div class="activation-panel">
+          <div class="panel-topline">
+            <span class="signal-bars"><i></i><i></i><i></i></span>
+            <span>Responder standby</span>
+          </div>
+          <h2>Aktifkan Pos Siaga</h2>
+          <p class="activation-copy">
+            Browser membutuhkan klik awal agar alarm suara dapat berjalan. Setelah aktif, sistem polling case darurat setiap 3 detik.
+          </p>
+          <button type="button" class="btn-primary btn-large" id="btnActivate">
+            Aktifkan Mode Siaga Petugas
+          </button>
+          <div class="activation-checklist">
+            <span>Alarm suara lokal</span>
+            <span>Layar merah berkedip</span>
+            <span>Link Google Maps eksternal</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="dashboard-view is-hidden" id="dashboardView">
+      <header class="command-header">
+        <div class="command-brand">
+          <div class="command-emblem">EC</div>
+          <div>
+            <p class="eyebrow">WIECARA Emergency Command</p>
+            <h1>Responder Dashboard</h1>
+          </div>
+        </div>
+        <div class="header-actions">
+          <span class="status-pill" id="connectionStatus">Siaga</span>
+        </div>
+      </header>
+
+      <section class="status-board">
+        <div class="status-tile status-tile-primary">
+          <span>Mode</span>
+          <strong>Siaga Aktif</strong>
+        </div>
+        <div class="status-tile">
+          <span>Polling</span>
+          <strong>3 Detik</strong>
+        </div>
+        <div class="status-tile">
+          <span>Rute</span>
+          <strong>Google Maps</strong>
+        </div>
+        <div class="status-tile">
+          <span>Kanal</span>
+          <strong>Polisi / Damkar</strong>
+        </div>
+      </section>
+
+      <section class="alert-banner is-hidden" id="alertBanner">
+        <span class="pulse-dot"></span>
+        <div>
+          <strong>DARURAT AKTIF</strong>
+          <p>Alarm berhenti hanya setelah petugas menerima case atau menandai false alarm.</p>
+        </div>
+      </section>
+
+      <section class="operations-grid">
+        <aside class="operations-panel">
+          <p class="eyebrow">Protokol Petugas</p>
+          <h2>Respons cepat</h2>
+          <ol>
+            <li>Baca pesan pemicu dan jenis risiko.</li>
+            <li>Buka koordinat melalui Google Maps.</li>
+            <li>Tekan “Saya segera ke lokasi” saat petugas bergerak.</li>
+          </ol>
+        </aside>
+
+        <section class="main-feed">
+          <section class="empty-state" id="emptyState">
+            <span class="empty-icon"></span>
+            <h2>Tidak ada emergency case aktif</h2>
+            <p>Biarkan dashboard ini tetap terbuka di pos petugas. Jika ARA membuat case HIGH RISK, halaman akan berubah merah dan alarm berbunyi.</p>
+          </section>
+
+          <section class="cases-grid" id="casesGrid" aria-live="polite"></section>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <audio id="alarmAudio" src="assets/alert-sound-effect.mp3" preload="auto" loop></audio>
+  <script src="emergency.js"></script>
+</body>
+</html>

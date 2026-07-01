@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" href="../Gambar/favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WIECARA Database Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-database logo-icon"></i>
+                <h2>WIECARA DB Admin</h2>
+            </div>
+            <div class="sidebar-content">
+                <div class="nav-section">
+                    <h3>TABLES</h3>
+                    <ul id="tableList" class="table-list">
+                        <!-- Tables will be injected here -->
+                        <li class="loading-text"><i class="fas fa-spinner fa-spin"></i> Loading...</li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="current-view" id="currentViewTitle">
+                    <i class="fas fa-table"></i> Select a table to view
+                </div>
+                <div class="topbar-actions">
+                    <button class="btn btn-outline" id="btnRefresh" title="Refresh Data">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <button class="btn btn-outline" id="btnResetDb" title="Reset Data (Delete All Transaction Data)" style="border-color: #ef4444; color: #ef4444;">
+                        <i class="fas fa-trash-alt"></i> Reset DB
+                    </button>
+                    <button class="btn btn-primary" id="btnRunQuery">
+                        <i class="fas fa-terminal"></i> SQL Query
+                    </button>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- Query Editor Panel (Hidden by default) -->
+                <div class="query-panel" id="queryPanel" style="display: none;">
+                    <div class="query-header">
+                        <h3>Execute SQL Query</h3>
+                        <button class="btn-close" id="btnCloseQuery"><i class="fas fa-times"></i></button>
+                    </div>
+                    <textarea id="sqlQueryInput" placeholder="Enter your SQL query here... (e.g. SELECT * FROM Admin)"></textarea>
+                    <div class="query-actions">
+                        <button class="btn btn-success" id="btnExecuteQuery">
+                            <i class="fas fa-play"></i> Execute
+                        </button>
+                        <span id="queryStatus" class="query-status"></span>
+                    </div>
+                </div>
+
+                <!-- Data Table View -->
+                <div class="table-container">
+                    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+                        <div class="loader"></div>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="data-table" id="dataTable">
+                            <thead id="dataHead">
+                                <tr>
+                                    <th>Select a table from the sidebar to view its data.</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dataBody">
+                                <!-- Data will be injected here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="emptyState" class="empty-state" style="display: none;">
+                        <i class="fas fa-box-open"></i>
+                        <p>No data found</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

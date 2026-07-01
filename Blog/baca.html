@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="id">
+    <head>
+    <link rel="icon" type="image/png" href="../Gambar/favicon.png">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+            name="description"
+            content="Baca artikel terkini seputar pencegahan dan penanganan kekerasan seksual di lingkungan kampus."
+        />
+        <title>Baca Artikel - Wiecara PPKS</title>
+
+        <!-- CSS -->
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+        />
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/aos@2.3.1/dist/aos.css"
+        />
+        <link rel="stylesheet" href="../style.css" />
+        <link rel="stylesheet" href="../Wawasan/wawasan.css" />
+        <link rel="stylesheet" href="../FABwiecara/fabwiecara.css" />
+        <link rel="stylesheet" href="../ChatBot/chatbot.css" />
+        <link rel="stylesheet" href="../assets/css/sienna-theme.css" />
+        <!-- Optimized Reading Styles -->
+        <link rel="stylesheet" href="css/read.css" />
+    </head>
+
+    <body>
+        <!-- Reading Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar" id="readingProgress"></div>
+        </div>
+
+        <!-- Sticky Back Navigation -->
+        <nav class="back-nav-sticky">
+            <a href="../Wawasan/wawasan.html#kabar-wiecara" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Kembali
+            </a>
+        </nav>
+
+        <!-- Navbar (Hidden/Simplified or kept as requested? Keeping standard per project consistency) -->
+        <nav class="navbar header-bg fixed-top" role="navigation">
+            <div class="main-container nav-content">
+                <a
+                    class="logo logo-flip"
+                    href="../LandingPage/Landing_Page.html"
+                >
+                    <span class="logo-flip-front">WIECARA</span>
+                    <span class="logo-flip-back"
+                        ><img
+                            src="../LandingPage/assets/flip.png"
+                            alt="WIECARA"
+                    /></span>
+                </a>
+
+                <div class="nav-links" id="primary-navigation">
+                    <a class="nav-item active" href="../Wawasan/wawasan.html"
+                        >WAWASAN</a
+                    >
+                    <a class="nav-item" href="../Monitoring/monitoring.html"
+                        >MONITORING</a
+                    >
+                </div>
+                <div class="nav-actions">
+                    <button
+                        class="btn btn-outline-light"
+                        onclick="window.location.href = '../Lapor/lapor.html'"
+                    >
+                        LAPOR
+                    </button>
+                </div>
+                <button class="hamburger"><i class="fas fa-bars"></i></button>
+            </div>
+        </nav>
+
+        <article class="article-wrapper" id="maincontent">
+            <!-- Dynamic Content Area -->
+            <div id="article-area">
+                <!-- Skeleton Loading -->
+                <div style="padding-top: 4rem; text-align: center">
+                    <div
+                        class="skeleton-anim"
+                        style="
+                            height: 60px;
+                            width: 70%;
+                            margin: 0 auto 2rem;
+                            border-radius: 8px;
+                        "
+                    ></div>
+                    <div
+                        class="skeleton-anim"
+                        style="
+                            height: 20px;
+                            width: 30%;
+                            margin: 0 auto 3rem;
+                            border-radius: 4px;
+                        "
+                    ></div>
+                    <div
+                        class="skeleton-anim"
+                        style="
+                            height: 400px;
+                            width: 100%;
+                            border-radius: 12px;
+                            margin-bottom: 3rem;
+                        "
+                    ></div>
+                </div>
+            </div>
+
+            <!-- Share Section -->
+            <section
+                class="share-section"
+                id="share-section"
+                style="display: none"
+            >
+                <div>
+                    <span class="share-label">Bagikan Artikel ini:</span>
+                    <button class="btn-share" id="btnShareLink">
+                        <i class="fas fa-link"></i> Salin Link
+                    </button>
+                </div>
+                <div
+                    id="shareMessage"
+                    style="
+                        color: var(--color-teal);
+                        font-weight: 600;
+                        opacity: 0;
+                        transition: opacity 0.3s;
+                    "
+                >
+                    Link tersalin!
+                </div>
+            </section>
+        </article>
+
+        <!-- Related Articles -->
+        <aside
+            class="related-section"
+            id="related-section"
+            style="display: none"
+        >
+            <div class="main-container">
+                <h3
+                    class="section-title text-center"
+                    style="font-size: 2rem; margin-bottom: 2rem"
+                >
+                    Artikel Terkait
+                </h3>
+                <div class="related-grid" id="related-grid">
+                    <!-- Related items here -->
+                </div>
+            </div>
+        </aside>
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <div class="main-container footer-grid">
+                <div class="footer-col footer-logo-col">
+                    <div class="footer-logo-section">
+                        <div class="footer-logo-wrapper">
+                            <img
+                                src="../LandingPage/assets/flip.png"
+                                alt="WIECARA Logo"
+                                class="footer-logo-img"
+                            />
+                        </div>
+                        <p class="footer-satgas-text">
+                            Satuan Tugas PPKPT Telkom University Surabaya
+                        </p>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h5>Halaman</h5>
+                    <ul class="clean-list">
+                        <li><a href="../Wawasan/wawasan.html">Wawasan</a></li>
+                        <li>
+                            <a href="../Monitoring/monitoring.html"
+                                >Monitoring</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer-col footer-back-top-col">
+                    <button
+                        class="back-to-top-btn"
+                        aria-label="Kembali ke atas"
+                        onclick="
+                            window.scrollTo({ top: 0, behavior: 'smooth' })
+                        "
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="M18 15l-6-6-6 6" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="main-container">
+                    <small style="display: block; margin-bottom: 8px">
+                        © 2026 Telkom University Surabaya. Design & Development
+                        by <strong>WIECARATIM</strong>
+                    </small>
+                </div>
+            </div>
+        </footer>
+
+        <!-- ChatBot Modal (Auto-injected) -->
+        <div id="chatbot-container"></div>
+
+        <!-- Scripts -->
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/sienna-accessibility@latest/dist/sienna-accessibility.umd.js"
+            defer
+        ></script>
+        <script src="../data.js" defer></script>
+        <script src="../index.js" defer></script>
+        <script src="js/blog-detail.js" defer></script>
+
+        <!-- Component Scripts -->
+        <script src="../assets/js/shared/encryption.js"></script>
+        <script src="../ChatBot/chat_storage.js"></script>
+        <script src="../ChatBot/chatbot.js"></script>
+        <script src="../FABwiecara/modules/breathing.js" defer></script>
+        <script src="../FABwiecara/fabwiecara.js" defer></script>
+
+        <script>
+            AOS.init({ duration: 800, once: true });
+
+            // Reading Progress Bar
+            window.onscroll = function () {
+                let winScroll =
+                    document.body.scrollTop ||
+                    document.documentElement.scrollTop;
+                let height =
+                    document.documentElement.scrollHeight -
+                    document.documentElement.clientHeight;
+                let scrolled = (winScroll / height) * 100;
+                const bar = document.getElementById("readingProgress");
+                if (bar) bar.style.width = scrolled + "%";
+            };
+        </script>
+    </body>
+</html>

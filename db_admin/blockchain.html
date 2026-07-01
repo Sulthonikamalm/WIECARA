@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <link rel="icon" type="image/png" href="../Gambar/favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#060910">
+    <title>WIECARA Chain — Secure Ledger Explorer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --bg: #060910;
+            --bg-2: #0a0f1c;
+            --panel: #0d1322;
+            --panel-2: #111a2e;
+            --block: #121c33;
+            --border: #1e2a44;
+            --border-soft: #18223a;
+            --txt: #e6edf6;
+            --txt-2: #93a4bd;
+            --txt-3: #5b6b85;
+            --cyan: #22d3ee;
+            --green: #34d399;
+            --red: #f87171;
+            --amber: #fbbf24;
+            --violet: #a78bfa;
+            --blue: #60a5fa;
+            --glow: rgba(34, 211, 238, 0.18);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--txt);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ===== Latar belakang bergaya cyber: grid + glow + scanline ===== */
+        .bg-fx { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+        .bg-fx::before {
+            content: ''; position: absolute; inset: 0;
+            background-image:
+                linear-gradient(var(--border-soft) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border-soft) 1px, transparent 1px);
+            background-size: 46px 46px;
+            mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
+            opacity: 0.5;
+            animation: grid-pan 24s linear infinite;
+        }
+        .bg-fx::after {
+            content: ''; position: absolute; inset: 0;
+            background:
+                radial-gradient(600px 320px at 12% -5%, rgba(34,211,238,0.10), transparent 60%),
+                radial-gradient(700px 380px at 90% 0%, rgba(167,139,250,0.10), transparent 60%),
+                radial-gradient(800px 500px at 50% 110%, rgba(52,211,153,0.06), transparent 60%);
+        }
+        @keyframes grid-pan { to { background-position: 46px 46px, 46px 46px; } }
+
+        .wrap { position: relative; z-index: 1; }
+
+        /* ===== Status bar atas ===== */
+        .topbar {
+            position: sticky; top: 0; z-index: 50;
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 20px; flex-wrap: wrap;
+            padding: 14px 28px;
+            background: linear-gradient(180deg, rgba(10,15,28,0.92), rgba(10,15,28,0.72));
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(14px);
+        }
+        .brand { display: flex; align-items: center; gap: 14px; }
+        .brand .mark {
+            width: 42px; height: 42px; border-radius: 11px;
+            display: grid; place-items: center;
+            background: linear-gradient(135deg, rgba(34,211,238,0.18), rgba(167,139,250,0.18));
+            border: 1px solid var(--border);
+            color: var(--cyan); font-size: 1.25rem;
+            box-shadow: 0 0 22px var(--glow);
+            animation: pulse 3s ease-in-out infinite;
+        }
+        @keyframes pulse { 0%,100% { box-shadow: 0 0 16px var(--glow); } 50% { box-shadow: 0 0 30px var(--glow); } }
+        .brand .name { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 1.05rem; letter-spacing: 0.5px; }
+        .brand .name span { color: var(--cyan); }
+        .brand .sub { font-size: 0.72rem; color: var(--txt-3); letter-spacing: 2px; text-transform: uppercase; }
+
+        .net-status { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+        .chip {
+            display: flex; align-items: center; gap: 8px;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+            color: var(--txt-2); padding: 7px 12px;
+            background: var(--panel); border: 1px solid var(--border); border-radius: 9px;
+        }
+        .chip b { color: var(--txt); font-weight: 600; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 10px var(--green); animation: blink 1.6s ease-in-out infinite; }
+        @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+        .actions { display: flex; align-items: center; gap: 10px; }
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.82rem;
+            padding: 10px 16px; border-radius: 10px; cursor: pointer;
+            border: 1px solid var(--border); background: var(--panel); color: var(--txt-2);
+            transition: all 0.2s ease;
+        }
+        .btn:hover { color: var(--txt); border-color: var(--cyan); transform: translateY(-1px); }
+        .btn-primary {
+            color: #04121a; border: none;
+            background: linear-gradient(135deg, var(--cyan), var(--green));
+            box-shadow: 0 6px 18px rgba(34,211,238,0.25);
+        }
+        .btn-primary:hover { color: #04121a; filter: brightness(1.06); box-shadow: 0 8px 24px rgba(34,211,238,0.38); }
+
+        .container { max-width: 1320px; margin: 0 auto; padding: 26px 28px 60px; }
+
+        /* ===== KPI cards ===== */
+        .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 18px; }
+        .kpi {
+            position: relative; overflow: hidden;
+            background: linear-gradient(180deg, var(--panel-2), var(--panel));
+            border: 1px solid var(--border); border-radius: 16px; padding: 18px 18px 16px;
+        }
+        .kpi::after {
+            content: ''; position: absolute; right: -30px; top: -30px;
+            width: 110px; height: 110px; border-radius: 50%;
+            background: radial-gradient(circle, var(--c, var(--cyan)), transparent 70%);
+            opacity: 0.12;
+        }
+        .kpi .ico { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; font-size: 1rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--c, var(--cyan)); margin-bottom: 14px; }
+        .kpi .lbl { font-size: 0.72rem; color: var(--txt-3); text-transform: uppercase; letter-spacing: 1.4px; }
+        .kpi .val { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 1.9rem; line-height: 1.1; margin-top: 4px; }
+        .kpi .val.sm { font-size: 0.82rem; word-break: break-all; font-weight: 600; color: var(--txt-2); display: flex; align-items: center; gap: 8px; }
+        .kpi.cyan { --c: var(--cyan); } .kpi.green { --c: var(--green); } .kpi.violet { --c: var(--violet); } .kpi.amber { --c: var(--amber); }
+
+        /* ===== Panel analitik (integrity ring + distribusi) ===== */
+        .analytics { display: grid; grid-template-columns: 280px 1fr; gap: 16px; margin-bottom: 18px; }
+        .card {
+            background: linear-gradient(180deg, var(--panel-2), var(--panel));
+            border: 1px solid var(--border); border-radius: 16px; padding: 20px;
+        }
+        .card h3 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1.6px; color: var(--txt-3); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .card h3 i { color: var(--cyan); }
+
+        .ring-wrap { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+        .ring {
+            --p: 100; --col: var(--green);
+            width: 150px; height: 150px; border-radius: 50%;
+            background: conic-gradient(var(--col) calc(var(--p) * 1%), var(--border) 0);
+            display: grid; place-items: center; position: relative;
+            transition: --p 0.6s ease;
+        }
+        .ring::before { content: ''; position: absolute; inset: 12px; border-radius: 50%; background: var(--panel); border: 1px solid var(--border); }
+        .ring .inner { position: relative; text-align: center; }
+        .ring .pct { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 1.9rem; color: var(--col); }
+        .ring .cap { font-size: 0.62rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--txt-3); }
+        .ring-note { font-size: 0.75rem; color: var(--txt-2); text-align: center; }
+
+        .dist-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+        .dist-title { font-size: 0.72rem; color: var(--txt-3); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 12px; }
+        .bar-row { display: grid; grid-template-columns: 110px 1fr 34px; align-items: center; gap: 10px; margin-bottom: 9px; font-size: 0.78rem; }
+        .bar-row .k { color: var(--txt-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .bar-track { height: 8px; background: var(--bg-2); border-radius: 6px; overflow: hidden; }
+        .bar-fill { height: 100%; border-radius: 6px; width: 0; transition: width 0.7s cubic-bezier(.2,.8,.2,1); background: linear-gradient(90deg, var(--cyan), var(--blue)); }
+        .bar-row .n { font-family: 'JetBrains Mono', monospace; color: var(--txt); text-align: right; font-size: 0.76rem; }
+
+        /* ===== Toolbar pencarian + filter ===== */
+        .toolbar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
+        .search {
+            flex: 1; min-width: 260px; display: flex; align-items: center; gap: 10px;
+            background: var(--panel); border: 1px solid var(--border); border-radius: 11px; padding: 11px 16px;
+        }
+        .search i { color: var(--txt-3); }
+        .search input { flex: 1; background: transparent; border: none; outline: none; color: var(--txt); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; }
+        .search input::placeholder { color: var(--txt-3); }
+        .filters { display: flex; gap: 8px; flex-wrap: wrap; }
+        .fchip {
+            font-size: 0.74rem; padding: 8px 13px; border-radius: 20px; cursor: pointer;
+            border: 1px solid var(--border); background: var(--panel); color: var(--txt-2);
+            display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease; user-select: none;
+        }
+        .fchip:hover { border-color: var(--cyan); color: var(--txt); }
+        .fchip.active { background: rgba(34,211,238,0.12); border-color: var(--cyan); color: var(--cyan); }
+        .fchip .cnt { font-family: 'JetBrains Mono', monospace; opacity: 0.7; }
+
+        /* ===== Banner validasi ===== */
+        .banner { display: none; align-items: center; gap: 12px; padding: 14px 20px; border-radius: 13px; margin-bottom: 18px; font-size: 0.88rem; }
+        .banner.show { display: flex; }
+        .banner.ok { background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.32); color: var(--green); }
+        .banner.bad { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.32); color: var(--red); }
+        .banner i { font-size: 1.1rem; }
+
+        /* ===== Chain ===== */
+        .chain { display: flex; flex-direction: column; }
+        .blk {
+            position: relative;
+            background: linear-gradient(180deg, var(--block), var(--panel));
+            border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+        }
+        .blk:hover { border-color: var(--cyan); box-shadow: 0 0 0 1px var(--glow), 0 14px 40px rgba(0,0,0,0.4); transform: translateY(-2px); }
+        .blk.tampered { border-color: var(--red); box-shadow: 0 0 0 1px rgba(248,113,113,0.35); }
+        .blk.tampered:hover { box-shadow: 0 0 0 1px rgba(248,113,113,0.5), 0 14px 40px rgba(0,0,0,0.4); }
+
+        .link { display: flex; justify-content: center; height: 30px; position: relative; }
+        .link::before { content: ''; position: absolute; top: 0; bottom: 0; width: 2px; left: 50%; transform: translateX(-50%); background: linear-gradient(var(--cyan), transparent); opacity: 0.6; }
+        .link i { position: relative; background: var(--bg); color: var(--cyan); font-size: 0.8rem; padding: 6px; border: 1px solid var(--border); border-radius: 50%; align-self: center; }
+
+        .blk-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+        .blk-id { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .cube { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 0.95rem; color: var(--txt); display: flex; align-items: center; gap: 8px; }
+        .cube i { color: var(--cyan); }
+        .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px; border-radius: 7px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; }
+        .badge.genesis { background: rgba(34,211,238,0.12); color: var(--cyan); border: 1px solid rgba(34,211,238,0.3); }
+        .badge.tamper { background: rgba(248,113,113,0.14); color: var(--red); border: 1px solid rgba(248,113,113,0.35); }
+        .act { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; }
+        .act.laporan { background: rgba(96,165,250,0.14); color: var(--blue); }
+        .act.status  { background: rgba(251,191,36,0.14); color: var(--amber); }
+        .act.psikolog{ background: rgba(34,211,238,0.14); color: var(--cyan); }
+        .act.hukum   { background: rgba(248,113,113,0.14); color: var(--red); }
+        .act.jadwal  { background: rgba(167,139,250,0.14); color: var(--violet); }
+        .act.feedback{ background: rgba(52,211,153,0.14); color: var(--green); }
+        .act.close   { background: rgba(148,163,184,0.14); color: var(--txt-2); }
+        .act.delete  { background: rgba(248,113,113,0.14); color: var(--red); }
+        .blk-time { font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; color: var(--txt-3); display: flex; align-items: center; gap: 6px; }
+
+        .blk-meta { display: flex; gap: 22px; flex-wrap: wrap; margin-bottom: 14px; }
+        .meta { font-size: 0.76rem; }
+        .meta .l { color: var(--txt-3); text-transform: uppercase; letter-spacing: 0.6px; font-size: 0.66rem; margin-bottom: 3px; }
+        .meta .v { font-family: 'JetBrains Mono', monospace; color: var(--txt); }
+
+        .hashes { background: var(--bg-2); border: 1px solid var(--border-soft); border-radius: 11px; padding: 12px 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .hash .l { font-size: 0.64rem; color: var(--txt-3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 5px; display: flex; align-items: center; gap: 6px; }
+        .hash .row { display: flex; align-items: center; gap: 8px; }
+        .hash code { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; word-break: break-all; line-height: 1.5; }
+        .hash.cur code { color: var(--cyan); }
+        .hash.prev code { color: var(--txt-3); }
+        .copy { cursor: pointer; color: var(--txt-3); font-size: 0.72rem; padding: 3px 6px; border-radius: 6px; border: 1px solid transparent; transition: all 0.15s ease; flex-shrink: 0; }
+        .copy:hover { color: var(--cyan); border-color: var(--border); background: var(--panel); }
+
+        .payload { margin-top: 12px; }
+        .payload .tg { cursor: pointer; color: var(--txt-2); font-size: 0.78rem; display: inline-flex; align-items: center; gap: 7px; user-select: none; }
+        .payload .tg:hover { color: var(--cyan); }
+        .payload .tg i { transition: transform 0.2s ease; }
+        .payload.open .tg i { transform: rotate(90deg); }
+        .payload pre {
+            display: none; margin-top: 10px; background: var(--bg); border: 1px solid var(--border-soft);
+            border-radius: 10px; padding: 14px; font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+            color: var(--green); white-space: pre-wrap; word-break: break-all; max-height: 240px; overflow: auto;
+        }
+        .payload.open pre { display: block; }
+
+        /* ===== Empty & skeleton ===== */
+        .empty { text-align: center; padding: 70px 20px; color: var(--txt-3); }
+        .empty i { font-size: 2.6rem; margin-bottom: 14px; display: block; color: var(--txt-3); }
+        .skel { height: 150px; border-radius: 16px; margin-bottom: 18px; background: linear-gradient(100deg, var(--panel) 30%, var(--panel-2) 50%, var(--panel) 70%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+        @keyframes shimmer { to { background-position: -200% 0; } }
+
+        /* ===== Toast ===== */
+        .toast-zone { position: fixed; right: 22px; bottom: 22px; z-index: 200; display: flex; flex-direction: column; gap: 10px; }
+        .toast {
+            display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 11px;
+            background: var(--panel-2); border: 1px solid var(--border); color: var(--txt); font-size: 0.82rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); animation: toast-in 0.25s ease;
+        }
+        .toast i { color: var(--green); }
+        @keyframes toast-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 980px) {
+            .kpi-grid { grid-template-columns: 1fr 1fr; }
+            .analytics { grid-template-columns: 1fr; }
+            .dist-cols { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 560px) {
+            .kpi-grid { grid-template-columns: 1fr; }
+            .hashes { grid-template-columns: 1fr; }
+            .container { padding: 18px 14px 50px; }
+            .topbar { padding: 12px 14px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-fx"></div>
+
+    <div class="wrap">
+        <!-- ===== Status bar ===== -->
+        <header class="topbar">
+            <div class="brand">
+                <div class="mark"><i class="fas fa-link"></i></div>
+                <div>
+                    <div class="name">WIECARA<span>::</span>CHAIN</div>
+                    <div class="sub">Secure Ledger Explorer</div>
+                </div>
+            </div>
+
+            <div class="net-status">
+                <div class="chip"><span class="dot"></span> NODE <b id="nodeState">ACTIVE</b></div>
+                <div class="chip"><i class="fas fa-fingerprint" style="color:var(--violet)"></i> CONSENSUS <b>SHA-256</b></div>
+                <div class="chip"><i class="far fa-clock" style="color:var(--cyan)"></i> SYNC <b id="lastSync">—</b></div>
+            </div>
+
+            <div class="actions">
+                <button class="btn" onclick="muatUlang()" title="Muat ulang"><i id="refreshIco" class="fas fa-rotate"></i></button>
+                <button class="btn btn-primary" onclick="validasiRantai(true)"><i class="fas fa-shield-halved"></i> Verifikasi Integritas</button>
+            </div>
+        </header>
+
+        <main class="container">
+            <!-- ===== KPI ===== -->
+            <section class="kpi-grid">
+                <div class="kpi cyan">
+                    <div class="ico"><i class="fas fa-cubes"></i></div>
+                    <div class="lbl">Total Blok</div>
+                    <div class="val" id="kTotal">0</div>
+                </div>
+                <div class="kpi green">
+                    <div class="ico"><i class="fas fa-layer-group"></i></div>
+                    <div class="lbl">Chain Height</div>
+                    <div class="val" id="kHeight">-1</div>
+                </div>
+                <div class="kpi violet">
+                    <div class="ico"><i class="fas fa-shield-halved"></i></div>
+                    <div class="lbl">Status Integritas</div>
+                    <div class="val" id="kIntegrity" style="font-size:1.15rem;">—</div>
+                </div>
+                <div class="kpi amber">
+                    <div class="ico"><i class="fas fa-hashtag"></i></div>
+                    <div class="lbl">Hash Terakhir</div>
+                    <div class="val sm" id="kHash">
+                        <span id="kHashTxt">—</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== Analitik ===== -->
+            <section class="analytics">
+                <div class="card">
+                    <h3><i class="fas fa-shield-halved"></i> Integritas Rantai</h3>
+                    <div class="ring-wrap">
+                        <div class="ring" id="ring" style="--p:100; --col:var(--green);">
+                            <div class="inner">
+                                <div class="pct" id="ringPct">—</div>
+                                <div class="cap">Terverifikasi</div>
+                            </div>
+                        </div>
+                        <div class="ring-note" id="ringNote">Klik “Verifikasi Integritas” untuk memvalidasi seluruh blok.</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><i class="fas fa-chart-simple"></i> Distribusi Ledger</h3>
+                    <div class="dist-cols">
+                        <div>
+                            <div class="dist-title">Per Tipe Aksi</div>
+                            <div id="distAction"><div class="ring-note">Memuat…</div></div>
+                        </div>
+                        <div>
+                            <div class="dist-title">Per Aktor</div>
+                            <div id="distRole"><div class="ring-note">Memuat…</div></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== Toolbar ===== -->
+            <div class="toolbar">
+                <div class="search">
+                    <i class="fas fa-magnifying-glass"></i>
+                    <input type="text" id="searchInput" placeholder="Telusuri kode laporan, email, atau kata kunci di payload…" oninput="cariDebounce()">
+                </div>
+            </div>
+            <div class="filters" id="filters"></div>
+
+            <!-- ===== Banner validasi ===== -->
+            <div class="banner" id="banner">
+                <i id="bannerIco" class="fas fa-circle-check"></i>
+                <span id="bannerTxt"></span>
+            </div>
+
+            <!-- ===== Chain ===== -->
+            <div class="chain" id="chain" style="margin-top:18px;">
+                <div class="skel"></div><div class="skel"></div><div class="skel"></div>
+            </div>
+        </main>
+    </div>
+
+    <div class="toast-zone" id="toastZone"></div>
+
+    <script>
+        // ====== State ======
+        let rantaiPenuh = [];          // hasil fetch chain terakhir (sudah difilter server bila ada search)
+        let filterAksi = 'ALL';        // filter tipe aksi (client-side)
+        let blokRusak = new Set();     // block_index yang gagal validasi
+        let timerCari;
+
+        // ====== Util ======
+        const ID = (x) => document.getElementById(x);
+
+        function tampilToast(pesan, ikon = 'fa-circle-check', warna = 'var(--green)') {
+            const t = document.createElement('div');
+            t.className = 'toast';
+            t.innerHTML = `<i class="fas ${ikon}" style="color:${warna}"></i> ${pesan}`;
+            ID('toastZone').appendChild(t);
+            setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity .3s'; setTimeout(() => t.remove(), 300); }, 2200);
+        }
+
+        async function salinTeks(teks, ev) {
+            ev && ev.stopPropagation();
+            try {
+                await navigator.clipboard.writeText(teks);
+                tampilToast('Hash disalin ke clipboard', 'fa-clipboard-check');
+            } catch (e) {
+                // Fallback untuk konteks non-secure (http lokal)
+                const ta = document.createElement('textarea');
+                ta.value = teks; document.body.appendChild(ta); ta.select();
+                try { document.execCommand('copy'); tampilToast('Hash disalin', 'fa-clipboard-check'); } catch (_) {}
+                ta.remove();
+            }
+        }
+
+        const potong = (h, n = 14) => (!h ? '—' : (h.length > n * 2 ? h.slice(0, n) + '…' + h.slice(-n) : h));
+
+        function jamSekarang() {
+            const d = new Date();
+            const p = (x) => String(x).padStart(2, '0');
+            return `${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+        }
+
+        // ====== Statistik ======
+        async function muatStatistik() {
+            try {
+                const d = await (await fetch('/api/blockchain/get_stats.php')).json();
+                if (d.status !== 'success') throw new Error();
+                const s = d.data;
+
+                ID('kTotal').textContent = s.total_blocks;
+                ID('kHeight').textContent = s.chain_height;
+                ID('kHashTxt').textContent = potong(s.latest_hash, 12);
+                ID('kHash').innerHTML = s.latest_hash
+                    ? `<span id="kHashTxt">${potong(s.latest_hash, 12)}</span><i class="copy fas fa-copy" onclick="salinTeks('${s.latest_hash}', event)"></i>`
+                    : '<span>—</span>';
+                ID('nodeState').textContent = 'ACTIVE';
+
+                renderDistribusi('distAction', s.by_action || [], 'action', 'count');
+                renderDistribusi('distRole', s.by_role || [], 'role', 'count');
+            } catch (e) {
+                ID('nodeState').textContent = 'OFFLINE';
+            }
+        }
+
+        const WARNA_BAR = ['var(--cyan)', 'var(--violet)', 'var(--green)', 'var(--amber)', 'var(--blue)', 'var(--red)'];
+
+        function renderDistribusi(targetId, list, keyName, valName) {
+            const el = ID(targetId);
+            if (!list.length) { el.innerHTML = '<div class="ring-note">Belum ada data.</div>'; return; }
+            const maks = Math.max(...list.map(x => x[valName]));
+            el.innerHTML = list.map((x, i) => {
+                const w = Math.round((x[valName] / maks) * 100);
+                const c = WARNA_BAR[i % WARNA_BAR.length];
+                const label = String(x[keyName]).replace(/_/g, ' ').toLowerCase();
+                return `<div class="bar-row">
+                    <div class="k" title="${label}">${label}</div>
+                    <div class="bar-track"><div class="bar-fill" style="background:linear-gradient(90deg, ${c}, transparent); width:0"></div></div>
+                    <div class="n">${x[valName]}</div>
+                </div>`;
+            }).join('');
+            // animasikan lebar setelah render
+            requestAnimationFrame(() => {
+                el.querySelectorAll('.bar-row').forEach((row, i) => {
+                    const w = Math.round((list[i][valName] / maks) * 100);
+                    row.querySelector('.bar-fill').style.width = w + '%';
+                });
+            });
+        }
+
+        // ====== Chain ======
+        async function muatRantai(search = '') {
+            try {
+                let url = '/api/blockchain/get_chain.php';
+                if (search) url += '?search=' + encodeURIComponent(search);
+                const d = await (await fetch(url)).json();
+                if (d.status !== 'success') throw new Error();
+                rantaiPenuh = d.data.chain || [];
+                buildFilter(rantaiPenuh);
+                renderRantai();
+                ID('lastSync').textContent = jamSekarang();
+            } catch (e) {
+                ID('chain').innerHTML = `<div class="empty"><i class="fas fa-triangle-exclamation"></i><p>Gagal memuat ledger. Pastikan server berjalan.</p></div>`;
+            }
+        }
+
+        function buildFilter(chain) {
+            const hitung = {};
+            chain.forEach(b => { hitung[b.action_type] = (hitung[b.action_type] || 0) + 1; });
+            const tipe = Object.keys(hitung).sort();
+            let html = `<div class="fchip ${filterAksi === 'ALL' ? 'active' : ''}" onclick="setFilter('ALL')"><i class="fas fa-layer-group"></i> Semua <span class="cnt">${chain.length}</span></div>`;
+            tipe.forEach(t => {
+                const m = metaAksi(t);
+                html += `<div class="fchip ${filterAksi === t ? 'active' : ''}" onclick="setFilter('${t}')"><i class="${m.icon}"></i> ${m.label} <span class="cnt">${hitung[t]}</span></div>`;
+            });
+            ID('filters').innerHTML = html;
+        }
+
+        function setFilter(t) { filterAksi = t; buildFilter(rantaiPenuh); renderRantai(); }
+
+        function metaAksi(type) {
+            const map = {
+                'LAPORAN_BARU':     { cls: 'laporan',  icon: 'fas fa-file-signature', label: 'Laporan Baru' },
+                'STATUS_UPDATE':    { cls: 'status',   icon: 'fas fa-arrows-rotate',  label: 'Update Status' },
+                'CATATAN_PSIKOLOG': { cls: 'psikolog', icon: 'fas fa-user-doctor',    label: 'Catatan Psikolog' },
+                'CATATAN_HUKUM':    { cls: 'hukum',    icon: 'fas fa-gavel',          label: 'Catatan Hukum' },
+                'JADWAL_BARU':      { cls: 'jadwal',   icon: 'fas fa-calendar-check', label: 'Jadwal Baru' },
+                'FEEDBACK_USER':    { cls: 'feedback', icon: 'fas fa-comment-dots',   label: 'Feedback' },
+                'CLOSE_CASE':       { cls: 'close',    icon: 'fas fa-lock',           label: 'Kasus Ditutup' },
+                'DELETE_CASE':      { cls: 'delete',   icon: 'fas fa-trash-can',      label: 'Kasus Dihapus' }
+            };
+            return map[type] || { cls: 'status', icon: 'fas fa-circle-info', label: type };
+        }
+
+        function renderRantai() {
+            const el = ID('chain');
+            const data = filterAksi === 'ALL' ? rantaiPenuh : rantaiPenuh.filter(b => b.action_type === filterAksi);
+
+            if (!data.length) {
+                el.innerHTML = `<div class="empty"><i class="fas fa-cube"></i><p>Belum ada blok yang cocok. Setiap aksi pada sistem otomatis terekam di sini.</p></div>`;
+                return;
+            }
+
+            el.innerHTML = data.map((b, i) => {
+                const m = metaAksi(b.action_type);
+                const tampered = blokRusak.has(b.block_index);
+                let payload;
+                try { payload = JSON.stringify(JSON.parse(b.data_payload), null, 2); }
+                catch (e) { payload = b.data_payload; }
+
+                const link = i > 0 ? `<div class="link"><i class="fas fa-link"></i></div>` : '';
+                const genesis = b.block_index === 0 ? `<span class="badge genesis"><i class="fas fa-seedling"></i> Genesis</span>` : '';
+                const tamperBadge = tampered ? `<span class="badge tamper"><i class="fas fa-triangle-exclamation"></i> Tamper</span>` : '';
+
+                return `${link}
+                <div class="blk ${tampered ? 'tampered' : ''}">
+                    <div class="blk-top">
+                        <div class="blk-id">
+                            <span class="cube"><i class="fas fa-cube"></i> #${b.block_index}</span>
+                            ${genesis}
+                            <span class="act ${m.cls}"><i class="${m.icon}"></i> ${m.label}</span>
+                            ${tamperBadge}
+                        </div>
+                        <div class="blk-time"><i class="far fa-clock"></i> ${b.timestamp}</div>
+                    </div>
+
+                    <div class="blk-meta">
+                        <div class="meta"><div class="l">Aktor</div><div class="v">${String(b.actor_role).toUpperCase()} · ID ${b.actor_id}</div></div>
+                        <div class="meta"><div class="l">Laporan</div><div class="v">${b.laporan_id ? '#' + b.laporan_id : '—'}</div></div>
+                        <div class="meta"><div class="l">Block ID</div><div class="v">${b.id}</div></div>
+                    </div>
+
+                    <div class="hashes">
+                        <div class="hash prev">
+                            <div class="l"><i class="fas fa-arrow-left-long"></i> Previous Hash</div>
+                            <div class="row"><code>${b.previous_hash}</code><span class="copy" onclick="salinTeks('${b.previous_hash}', event)"><i class="fas fa-copy"></i></span></div>
+                        </div>
+                        <div class="hash cur">
+                            <div class="l"><i class="fas fa-fingerprint"></i> Block Hash · SHA-256</div>
+                            <div class="row"><code>${b.hash}</code><span class="copy" onclick="salinTeks('${b.hash}', event)"><i class="fas fa-copy"></i></span></div>
+                        </div>
+                    </div>
+
+                    <div class="payload">
+                        <div class="tg" onclick="this.parentElement.classList.toggle('open')"><i class="fas fa-chevron-right"></i> Data Payload</div>
+                        <pre>${payload}</pre>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // ====== Validasi integritas ======
+        async function validasiRantai(manual = false) {
+            const ico = ID('refreshIco');
+            try {
+                const d = await (await fetch('/api/blockchain/validate_chain.php')).json();
+                const v = d.data;
+
+                blokRusak = new Set((v.broken_blocks || []).map(x => x.block_index));
+                const total = v.total_blocks || 0;
+                const rusak = blokRusak.size;
+                const persen = total > 0 ? Math.round(((total - rusak) / total) * 100) : 100;
+
+                // Ring
+                const col = v.valid ? 'var(--green)' : 'var(--red)';
+                ID('ring').style.setProperty('--p', persen);
+                ID('ring').style.setProperty('--col', col);
+                ID('ringPct').textContent = persen + '%';
+                ID('ringPct').style.color = col;
+                ID('ringNote').textContent = v.valid
+                    ? `Seluruh ${total} blok terverifikasi. Tidak ada manipulasi.`
+                    : `${rusak} dari ${total} blok terindikasi dimanipulasi.`;
+
+                // KPI status
+                ID('kIntegrity').innerHTML = v.valid
+                    ? `<span style="color:var(--green)"><i class="fas fa-circle-check"></i> Aman</span>`
+                    : `<span style="color:var(--red)"><i class="fas fa-circle-exclamation"></i> Terkompromi</span>`;
+
+                // Banner
+                const banner = ID('banner');
+                banner.className = 'banner show ' + (v.valid ? 'ok' : 'bad');
+                ID('bannerIco').className = 'fas ' + (v.valid ? 'fa-shield-halved' : 'fa-triangle-exclamation');
+                ID('bannerTxt').textContent = v.valid
+                    ? `${v.message} — ${total} blok diverifikasi via SHA-256 chain linkage.`
+                    : `${v.message}`;
+
+                renderRantai(); // refresh agar badge tamper muncul
+                if (manual) tampilToast(v.valid ? 'Integritas chain valid' : 'Anomali terdeteksi!', v.valid ? 'fa-shield-halved' : 'fa-triangle-exclamation', v.valid ? 'var(--green)' : 'var(--red)');
+            } catch (e) {
+                ID('ringPct').textContent = '—';
+                ID('ringNote').textContent = 'Gagal memvalidasi rantai.';
+                if (manual) tampilToast('Gagal memvalidasi', 'fa-triangle-exclamation', 'var(--red)');
+            }
+        }
+
+        // ====== Aksi UI ======
+        function cariDebounce() {
+            clearTimeout(timerCari);
+            timerCari = setTimeout(() => {
+                filterAksi = 'ALL';
+                muatRantai(ID('searchInput').value.trim());
+            }, 400);
+        }
+
+        async function muatUlang() {
+            const ico = ID('refreshIco');
+            ico.classList.add('fa-spin');
+            await Promise.all([muatStatistik(), muatRantai(ID('searchInput').value.trim())]);
+            await validasiRantai(false);
+            setTimeout(() => ico.classList.remove('fa-spin'), 500);
+        }
+
+        // ====== Init ======
+        (async function init() {
+            await Promise.all([muatStatistik(), muatRantai()]);
+            await validasiRantai(false); // auto-verifikasi agar ring & status langsung terisi
+            // perbarui jam sync tiap 30 detik (tampilan "live")
+            setInterval(() => { ID('lastSync').textContent = jamSekarang(); }, 30000);
+        })();
+    </script>
+</body>
+</html>

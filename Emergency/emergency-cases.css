@@ -1,0 +1,249 @@
+﻿.cases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 16px;
+}
+
+.case-card {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  background: #fff;
+  color: #0f172a;
+  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+body.has-active-emergency .case-card {
+  border: 5px solid #fff;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.42), 0 0 0 9px rgba(255, 255, 255, 0.17);
+}
+
+.case-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 18px;
+  background: linear-gradient(135deg, #6a0000, #e00000);
+  color: #fff;
+}
+
+.case-top strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 32px;
+  line-height: 0.95;
+  font-weight: 900;
+}
+
+.case-top span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.17);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.case-risk-chip {
+  flex: 0 0 auto;
+  max-width: 150px;
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: #fff;
+  color: #9f0000;
+  font-size: 12px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.case-body {
+  padding: 18px;
+}
+
+.case-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.summary-tile {
+  min-height: 76px;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.summary-tile span,
+.data-label {
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.summary-tile strong {
+  display: block;
+  margin-top: 7px;
+  color: #0f172a;
+  font-size: 15px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.trigger-box {
+  margin-bottom: 14px;
+  padding: 14px;
+  border-left: 5px solid #dc0000;
+  border-radius: 8px;
+  background: #fff1f2;
+}
+
+.trigger-box span {
+  display: block;
+  margin-bottom: 8px;
+  color: #9f1239;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.trigger-box p {
+  margin-bottom: 0;
+  color: #7f1d1d;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.data-row {
+  display: grid;
+  grid-template-columns: 132px 1fr;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #edf2f7;
+  font-size: 13px;
+}
+
+.data-row:last-child {
+  border-bottom: none;
+}
+
+.data-value {
+  color: #0f172a;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.location-warning {
+  margin: 14px 0 0;
+  padding: 12px;
+  border-radius: 8px;
+  background: #fff7ed;
+  color: #9a3412;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.case-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  padding: 18px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+}
+
+@media (max-width: 900px) {
+  .cases-grid {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .case-summary,
+  .cases-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .case-top {
+    flex-direction: column;
+  }
+
+  .case-risk-chip {
+    max-width: none;
+  }
+
+  .data-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}
+
+@media (max-width: 520px) {
+  .case-card {
+    border-radius: 8px;
+  }
+
+  body.has-active-emergency .case-card {
+    border-width: 3px;
+    box-shadow: 0 22px 60px rgba(0, 0, 0, 0.38), 0 0 0 5px rgba(255, 255, 255, 0.15);
+  }
+
+  .case-top,
+  .case-body,
+  .case-actions {
+    padding: 14px;
+  }
+
+  .case-top strong {
+    font-size: 28px;
+  }
+
+  .case-top span,
+  .case-risk-chip {
+    width: 100%;
+    justify-content: center;
+    max-width: none;
+  }
+
+  .summary-tile {
+    min-height: auto;
+    padding: 11px;
+  }
+
+  .trigger-box {
+    padding: 12px;
+  }
+
+  .trigger-box p {
+    font-size: 14px;
+  }
+
+  .data-row {
+    padding: 9px 0;
+  }
+}
+
+@media (max-width: 380px) {
+  .case-top strong {
+    font-size: 24px;
+  }
+
+  .summary-tile strong,
+  .data-value,
+  .location-warning {
+    font-size: 12px;
+  }
+}

@@ -1,0 +1,235 @@
+/* FAB WIECARA - Chat Button Only */
+
+/* --- Container ---------------------------------------------
+   position: fixed tepat di pojok kanan bawah.
+   flex-direction: row-reverse ? item pertama di DOM (button)
+   ditempatkan paling KANAN, tooltip (item kedua) di KIRI.
+   pointer-events: none agar area transparan tidak memblok klik.
+------------------------------------------------------------- */
+.fab-wiecara-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 14px;
+    pointer-events: none;
+}
+
+/* --- Tombol utama ------------------------------------------
+   Item pertama di DOM ? dengan row-reverse, tampil paling kanan.
+   Selalu di pojok viewport. pointer-events: auto karena harus klik.
+------------------------------------------------------------- */
+.fab-main {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: #2fc4b285;
+    border: none;
+    cursor: pointer;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    place-items: center;
+    box-shadow: 0 8px 28px rgba(47, 196, 178, 0.38);
+    transition:
+        transform 0.25s cubic-bezier(0.22, 0.61, 0.36, 1),
+        box-shadow 0.25s ease;
+    position: relative;
+    overflow: hidden;
+    pointer-events: auto;
+}
+
+/* Shine effect dalam lingkaran */
+.fab-main::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        circle at 30% 30%,
+        rgba(255, 255, 255, 0.32),
+        transparent 60%
+    );
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+}
+
+.fab-main:hover {
+    transform: scale(1.08) translateY(-2px);
+    box-shadow: 0 14px 40px rgba(47, 196, 178, 0.52);
+}
+
+.fab-main:hover::before {
+    opacity: 1;
+}
+
+.fab-main:active {
+    transform: scale(0.94);
+    box-shadow: 0 6px 20px rgba(47, 196, 178, 0.35);
+}
+
+/* --- Logo ARA --------------------------------------------- */
+.fab-logo-shell {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #ffffff;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    place-items: center;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.85);
+    pointer-events: none;
+    transition: transform 0.2s ease;
+}
+
+.fab-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    display: block;
+    transform: scale(1.08);
+    transform-origin: center center;
+}
+
+.fab-logo-fallback {
+    display: none;
+    color: #5b50c8;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.fab-main:hover .fab-logo-shell {
+    transform: scale(1.12);
+}
+
+/* --- Tooltip -----------------------------------------------
+   Item KEDUA di DOM ? dengan row-reverse, tampil di KIRI button.
+   Berada dalam flex flow biasa, TIDAK position: absolute,
+   sehingga TIDAK terpengaruh overflow: hidden milik button sama sekali.
+   Trigger tampil via adjacent sibling selector: .fab-main:hover + .fab-tooltip
+------------------------------------------------------------- */
+.fab-tooltip {
+    /* flex item biasa, tidak absolute */
+    position: relative; /* hanya untuk ::after arrow */
+    flex-shrink: 0;
+
+    background: rgba(22, 22, 32, 0.93);
+    color: #fff;
+    padding: 7px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.4;
+    white-space: nowrap;
+
+    /* Tersembunyi secara default */
+    opacity: 0;
+    transform: translateX(6px);
+    pointer-events: none;
+    user-select: none;
+
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+}
+
+/* Panah ? mengarah ke kanan (ke arah button) */
+.fab-tooltip::after {
+    content: "";
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 5px solid transparent;
+    border-left-color: rgba(22, 22, 32, 0.93);
+}
+
+/* Tampil saat button di-hover via adjacent sibling selector */
+.fab-main:hover + .fab-tooltip {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* --- Responsif ---------------------------------------------
+   Mobile: sembunyikan tooltip sepenuhnya (display:none)
+   agar tidak makan layout dan tidak ada area transparan.
+------------------------------------------------------------- */
+@media (max-width: 768px) {
+    .fab-wiecara-container {
+        bottom: 20px;
+        right: 20px;
+        gap: 0;
+    }
+
+    .fab-main {
+        width: 56px;
+        height: 56px;
+    }
+
+    .fab-logo-shell {
+        width: 45px;
+        height: 45px;
+    }
+
+    .fab-tooltip {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .fab-wiecara-container {
+        bottom: 16px;
+        right: 16px;
+    }
+
+    .fab-main {
+        width: 52px;
+        height: 52px;
+    }
+
+    .fab-logo-shell {
+        width: 42px;
+        height: 42px;
+    }
+}
+
+/* --- Aksesibilitas --------------------------------------- */
+.fab-main:focus-visible {
+    outline: 3px solid rgba(255, 255, 255, 0.8);
+    outline-offset: 3px;
+}
+
+/* Tampilkan tooltip juga saat focus (keyboard nav) */
+.fab-main:focus-visible + .fab-tooltip {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* --- Reduced motion -------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    .fab-main,
+    .fab-main::before,
+    .fab-logo-shell,
+    .fab-tooltip {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* --- Print ----------------------------------------------- */
+@media print {
+    .fab-wiecara-container {
+        display: none !important;
+    }
+}

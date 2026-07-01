@@ -1,0 +1,79 @@
+graph TD
+    %% Konfigurasi Estetika Diagram
+    classDef startEnd fill:#1E293B,stroke:#0F172A,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef action fill:#DBEAFE,stroke:#2563EB,stroke-width:2px,color:#1E3A8A;
+    classDef system fill:#D1FAE5,stroke:#059669,stroke-width:2px,color:#064E3B;
+    classDef blockchain fill:#FEF3C7,stroke:#D97706,stroke-width:2px,color:#92400E;
+    classDef decision fill:#F3E8FF,stroke:#9333EA,stroke-width:2px,color:#581C87,shape:diamond;
+
+    Start((Mulai: Insiden)):::startEnd
+    
+    subgraph Fase 1: Pintu Masuk & Ekstraksi
+        PintuMasuk{"Pilih Tingkat <br/>Kesiapan Mental?"}:::decision
+        Bot["Chatbot ARA <br/>(Dialog Suportif)"]:::action
+        Form["Formulir Langsung <br/>(Struktur Formal)"]:::action
+        Intent["AI mengekstraksi data & <br/>klasifikasi Niat (Intent)"]:::system
+        Autofill["Menyimpan ke Session Storage <br/>& Fitur Autofill"]:::system
+    end
+    
+    Start --> PintuMasuk
+    PintuMasuk -->|"Kronologi Lengkap"| Form
+    PintuMasuk -->|"Butuh Panduan"| Bot
+    Bot --> Intent
+    Intent --> Autofill
+    Autofill --> Form
+    
+    subgraph Fase 2: Pembekuan Enkripsi & Blockchain
+        Submit("Tombol Kirim Laporan"):::action
+        AES["Enkripsi Otomatis <br/>(AES-256-GCM)"]:::system
+        Hash["Proses Hash Kriptografis <br/>(SHA-256)"]:::system
+        BC1[("Smart Contract Blockchain <br/>Catat Stempel Waktu")]:::blockchain
+    end
+    
+    Form --> Submit
+    Submit --> AES
+    Submit --> Hash
+    Hash --> BC1
+    
+    subgraph Fase 3: Verifikasi Komando Satgas
+        Admin["Dashboard Admin Satgas"]:::action
+        Validate["Admin Membuka Enkripsi <br/>(Proses Diaudit)"]:::action
+        Status1["Ubah Status: <br/>Sedang Diproses"]:::system
+        Delegasi{"Delegasi Instansi <br/>Secara Paralel"}:::decision
+    end
+    
+    AES --> Admin
+    BC1 --> Admin
+    Admin --> Validate
+    Validate --> Status1
+    Status1 --> Delegasi
+    
+    subgraph Fase 4: Penanganan Lintas Sektor
+        Psikolog["Divisi Psikologi <br/>(Kuratif)"]:::action
+        Hukum["Divisi Hukum <br/>(Yudisial)"]:::action
+        Medis["Asesmen Klinis & Konseling"]:::action
+        Bukti["Tinjau Barang Bukti Digital"]:::action
+        DocTrauma["Dokumen Validasi Trauma Psikologis <br/>(Bukti Sekunder)"]:::system
+    end
+    
+    Delegasi -->|"Pendampingan"| Psikolog
+    Delegasi -->|"Investigasi"| Hukum
+    Psikolog --> Medis
+    Medis --> DocTrauma
+    Hukum --> Bukti
+    DocTrauma -.->|"Disinkronkan sebagai penguat alibi"| Bukti
+    
+    subgraph Fase 5 & 6: Putusan Akhir
+        Sidang["Musyawarah Komite Etik <br/>& Pemanggilan Tersangka"]:::action
+        Putusan["Keputusan Sanksi Definitif <br/>(Demosi/DO)"]:::action
+        Status2["Ubah Status: Selesai"]:::system
+        BC2[("Smart Contract Blockchain <br/>Kunci Status Permanen")]:::blockchain
+        Notif["Pemantau Pengguna X: <br/>Tuntas & Adil"]:::system
+    end
+    
+    Bukti --> Sidang
+    Sidang --> Putusan
+    Putusan --> Status2
+    Status2 --> BC2
+    BC2 --> Notif
+    Notif --> End((Tuntas)):::startEnd

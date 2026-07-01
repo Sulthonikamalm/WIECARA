@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="id">
+    <head>
+    <link rel="icon" type="image/png" href="../Gambar/favicon.png">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Kabar Wiecara - Semua Artikel</title>
+
+        <!-- Font Awesome -->
+        <!-- CSS -->
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+        />
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/aos@2.3.1/dist/aos.css"
+        />
+        <link rel="stylesheet" href="../style.css" />
+        <link rel="stylesheet" href="../Wawasan/wawasan.css" />
+        <link rel="stylesheet" href="../FABwiecara/fabwiecara.css" />
+        <link rel="stylesheet" href="../ChatBot/chatbot.css" />
+        <link rel="stylesheet" href="../assets/css/sienna-theme.css" />
+        <link rel="stylesheet" href="css/list.css" />
+    </head>
+
+    <body>
+        <nav class="navbar header-bg fixed-top" role="navigation">
+            <div class="main-container nav-content">
+                <a
+                    class="logo logo-flip"
+                    href="../LandingPage/Landing_Page.html"
+                >
+                    <span class="logo-flip-front">WIECARA</span>
+                    <span class="logo-flip-back"
+                        ><img
+                            src="../LandingPage/assets/flip.png"
+                            alt="WIECARA"
+                    /></span>
+                </a>
+
+                <div class="nav-links" id="primary-navigation">
+                    <a class="nav-item active" href="../Wawasan/wawasan.html"
+                        >WAWASAN</a
+                    >
+                    <a class="nav-item" href="../Monitoring/monitoring.html"
+                        >MONITORING</a
+                    >
+                </div>
+                <div class="nav-actions">
+                    <button
+                        class="btn btn-outline-light"
+                        onclick="window.location.href = '../Lapor/lapor.html'"
+                    >
+                        LAPOR
+                    </button>
+                </div>
+                <button class="hamburger"><i class="fas fa-bars"></i></button>
+            </div>
+        </nav>
+
+        <header class="blog-header">
+            <div class="main-container" style="position: relative">
+                <div
+                    class="back-nav"
+                    style="position: absolute; top: -40px; left: 0"
+                >
+                    <!-- Updated Link to jump to #kabar-wiecara section -->
+                    <a href="../Wawasan/wawasan.html#kabar-wiecara"
+                        ><i class="fas fa-arrow-left"></i> Wawasan</a
+                    >
+                </div>
+
+                <h1 data-aos="fade-down">Kabar Wiecara</h1>
+                <p data-aos="fade-up" data-aos-delay="100">
+                    Informasi dan edukasi terkini seputar PPKS
+                </p>
+
+                <div
+                    class="search-container"
+                    data-aos="fade-up"
+                    data-aos-delay="200"
+                >
+                    <input
+                        type="text"
+                        id="searchInput"
+                        class="search-input"
+                        placeholder="Cari artikel... (Min. 3 karakter)"
+                    />
+                    <button class="search-btn" id="searchBtn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-container section-padding">
+            <div class="artikel-grid" id="blog-grid">
+                <!-- Content goes here -->
+            </div>
+
+            <div class="pagination-container" id="pagination">
+                <!-- Pagination -->
+            </div>
+        </main>
+
+        <footer class="main-footer">
+            <div class="main-container footer-grid">
+                <div class="footer-col footer-logo-col">
+                    <div class="footer-logo-section">
+                        <div class="footer-logo-wrapper">
+                            <img
+                                src="../LandingPage/assets/flip.png"
+                                alt="WIECARA Logo"
+                                class="footer-logo-img"
+                            />
+                        </div>
+                        <p class="footer-satgas-text">
+                            Satuan Tugas PPKPT Telkom University Surabaya
+                        </p>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h5>Halaman</h5>
+                    <ul class="clean-list">
+                        <li><a href="../Wawasan/wawasan.html">Wawasan</a></li>
+                        <li>
+                            <a href="../Monitoring/monitoring.html"
+                                >Monitoring</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer-col footer-back-top-col">
+                    <button
+                        class="back-to-top-btn"
+                        aria-label="Kembali ke atas"
+                        onclick="
+                            window.scrollTo({ top: 0, behavior: 'smooth' })
+                        "
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="M18 15l-6-6-6 6" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="main-container">
+                    <small style="display: block; margin-bottom: 8px">
+                        © 2026 Telkom University Surabaya. Design & Development
+                        by <strong>WIECARATIM</strong>
+                    </small>
+                </div>
+            </div>
+        </footer>
+
+        <!-- ChatBot Modal (Auto-injected) -->
+        <div id="chatbot-container"></div>
+
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+        <script src="../data.js" defer></script>
+        <script src="js/blog-list.js" defer></script>
+
+        <!-- Accessibility Library -->
+        <script
+            src="https://cdn.jsdelivr.net/npm/sienna-accessibility@latest/dist/sienna-accessibility.umd.js"
+            defer
+        ></script>
+
+        <!-- ChatBot Scripts -->
+        <script src="../assets/js/shared/encryption.js"></script>
+        <script src="../ChatBot/chat_storage.js"></script>
+        <script src="../ChatBot/chatbot.js"></script>
+
+        <!-- FAB Wiecara Scripts -->
+        <script src="../FABwiecara/modules/breathing.js" defer></script>
+        <script src="../FABwiecara/fabwiecara.js" defer></script>
+
+        <!-- Main Website Scripts -->
+        <script src="../index.js" defer></script>
+
+        <script>
+            AOS.init();
+        </script>
+    </body>
+</html>

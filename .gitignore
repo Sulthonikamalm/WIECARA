@@ -1,0 +1,39 @@
+# Environment & credentials (JANGAN commit)
+.env
+.env.local
+.env.production
+env
+
+# Virtual environment Python
+.venv/
+venv/
+
+# Cache & bytecode Python
+__pycache__/
+*.py[cod]
+
+# Server-side session storage (berisi data session sensitif)
+/flask_session/
+
+# File upload pengguna (bukti, gambar blog, dokumen psikolog)
+/uploads/bukti/*
+/uploads/blog/*
+/uploads/psikolog/*
+!/uploads/**/.gitkeep
+
+# Backup database & arsip (jangan ikut ter-commit)
+*.db.bak*
+*.zip
+
+# Log
+*.log
+*.log.gz
+
+# IDE & OS
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db

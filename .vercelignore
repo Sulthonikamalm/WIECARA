@@ -1,0 +1,29 @@
+# Lingkungan & rahasia — env vars di-set lewat dashboard Vercel, bukan file.
+# (server.py akan menimpa os.environ jika file `env` ikut ter-bundle, jadi dikecualikan.)
+env
+.env
+.env.*
+
+# Virtual environment & cache Python
+.venv/
+venv/
+__pycache__/
+**/__pycache__/
+*.py[cod]
+
+# Session filesystem lokal (ephemeral, di Vercel pakai /tmp)
+flask_session/
+
+# Upload lokal pengguna (di Vercel ditulis ke /tmp)
+uploads/bukti/
+uploads/blog/
+uploads/psikolog/
+
+# Tooling, test, arsip, log — tidak perlu di runtime serverless
+tests/
+.git/
+.claude/
+*.log
+*.log.gz
+*.zip
+*.db.bak*

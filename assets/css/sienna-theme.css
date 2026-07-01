@@ -1,0 +1,38 @@
+/* WIECARA theme override for Sienna Accessibility widget. */
+.asw-widget,
+.asw-menu {
+    --asw-primary: #117c6f !important;
+}
+
+.asw-widget .asw-menu-btn,
+.asw-menu-btn {
+    outline-color: #117c6f !important;
+    background: linear-gradient(135deg, #117c6f 0%, #289c8e 100%) !important;
+    box-shadow:
+        0 8px 22px rgba(17, 124, 111, 0.30),
+        0 2px 6px rgba(7, 58, 52, 0.24) !important;
+}
+
+.asw-widget .asw-menu-btn:hover,
+.asw-menu-btn:hover {
+    box-shadow:
+        0 12px 28px rgba(17, 124, 111, 0.38),
+        0 0 0 6px rgba(178, 240, 232, 0.18) !important;
+}
+
+.asw-menu .asw-btn,
+.asw-menu .asw-menu-reset,
+.asw-menu .asw-menu-close,
+.asw-menu .asw-adjust-font div[role="button"],
+.asw-menu .asw-filter div[role="button"] {
+    color: #117c6f !important;
+}
+
+.asw-menu .asw-btn.asw-selected,
+.asw-menu .asw-btn:hover,
+.asw-menu .asw-card button:hover,
+.asw-menu .asw-adjust-font div[role="button"]:hover,
+.asw-menu .asw-filter div[role="button"]:hover {
+    border-color: #117c6f !important;
+    background: rgba(178, 240, 232, 0.28) !important;
+}

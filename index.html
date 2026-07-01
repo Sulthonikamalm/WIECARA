@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <link rel="icon" type="image/png" href="Gambar/favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WIECARA PPKPT — Pilih Akses</title>
+    <meta name="description" content="WIECARA PPKPT - Sistem Informasi Penanganan Kekerasan di Lingkungan Kampus">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Poppins', 'system-ui', 'sans-serif'] },
+                    colors: {
+                        brand: { 50: '#effdfb', 100: '#b2f0e8', 200: '#8de5db', 300: '#2fc4b2', 400: '#289c8e', 500: '#117c6f', 600: '#0f6f64', 700: '#0d5d54', 800: '#0a4c44', 900: '#073a34' }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #117c6f 0%, #289c8e 32%, #2fc4b2 58%, #8de5db 82%, #117c6f 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 12s ease infinite;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .floating-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            animation: floatOrb 20s ease-in-out infinite;
+        }
+        .orb-1 { width: 400px; height: 400px; background: #2fc4b2; top: -10%; left: -5%; animation-delay: 0s; }
+        .orb-2 { width: 350px; height: 350px; background: #117c6f; bottom: -15%; right: -5%; animation-delay: 5s; }
+        .orb-3 { width: 250px; height: 250px; background: #8de5db; top: 50%; left: 50%; animation-delay: 10s; }
+        @keyframes floatOrb {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+
+        .role-card {
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)),
+                rgba(9, 86, 77, 0.64);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(178, 240, 232, 0.28);
+            transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease, background 0.28s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            min-height: 390px;
+            box-shadow:
+                0 18px 44px rgba(3, 46, 41, 0.30),
+                0 1px 0 rgba(255, 255, 255, 0.10) inset;
+        }
+        .role-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--accent-gradient);
+            opacity: 0.85;
+            transform: scaleX(1);
+            transition: opacity 0.28s ease;
+        }
+        .role-card:hover::before { opacity: 1; }
+        .role-card:hover {
+            transform: translateY(-6px);
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.05)),
+                rgba(9, 86, 77, 0.72);
+            border-color: rgba(178, 240, 232, 0.48);
+            box-shadow:
+                0 24px 58px rgba(3, 46, 41, 0.38),
+                0 0 0 1px rgba(178, 240, 232, 0.18);
+        }
+
+        .card-admin { --accent-gradient: linear-gradient(135deg, #2fc4b2, #117c6f); }
+        .card-psikolog { --accent-gradient: linear-gradient(135deg, #289c8e, #117c6f); }
+        .card-legal { --accent-gradient: linear-gradient(135deg, #8de5db, #289c8e); }
+        .card-emergency { --accent-gradient: linear-gradient(135deg, #2fc4b2, #117c6f); }
+        .card-user { --accent-gradient: linear-gradient(135deg, #b2f0e8, #2fc4b2); }
+
+        .role-card > * {
+            position: relative;
+            z-index: 1;
+        }
+        .role-card > div { width: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .role-card h3 { min-height: 34px; display: flex; align-items: center; justify-content: center; }
+        .role-card p { min-height: 84px; max-width: 280px; }
+        .card-user { width: min(100%, 360px); min-height: 330px; }
+        .card-user p { min-height: 64px; }
+        .access-cards { width: min(100%, 1680px); margin-inline: auto; }
+        .role-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(1.25rem, 2vw, 1.75rem); width: 100%; max-width: 1440px; margin-inline: auto; justify-items: center; align-items: stretch; }
+        .role-card { width: 100%; max-width: 360px; }
+        .role-tags { min-height: 64px; align-content: center; }
+        .enter-btn {
+            margin-top: auto;
+        }
+
+        .icon-ring {
+            width: 84px; height: 84px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+            transition: transform 0.28s ease, border-color 0.28s ease, background 0.28s ease;
+            border: 1px solid rgba(178, 240, 232, 0.24);
+            box-shadow:
+                0 12px 28px rgba(3, 46, 41, 0.22),
+                0 1px 0 rgba(255,255,255,0.12) inset;
+        }
+        .role-card:hover .icon-ring {
+            transform: translateY(-2px);
+            border-color: rgba(178, 240, 232, 0.42);
+        }
+        .icon-ring::after {
+            content: ''; position: absolute; inset: -5px; border-radius: inherit;
+            border: 2px solid rgba(178, 240, 232, 0.30); border-top-color: transparent; border-right-color: transparent;
+            animation: spinRing 7s linear infinite;
+        }
+        @keyframes spinRing { to { transform: rotate(360deg); } }
+        .admin-ring,
+        .psikolog-ring,
+        .legal-ring,
+        .emergency-ring,
+        .user-ring {
+            background: rgba(178, 240, 232, 0.10);
+        }
+
+        .particles {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            width: 3px; height: 3px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            animation: particleFloat 15s linear infinite;
+        }
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+        }
+
+        .brand-glow {
+            text-shadow: 0 0 40px rgba(47, 196, 178, 0.34), 0 0 80px rgba(17, 124, 111, 0.24);
+        }
+
+        .role-icon-teal { color: #b2f0e8; }
+        .role-chip-teal {
+            background: rgba(178, 240, 232, 0.10);
+            color: #d8fbf7;
+            border: 1px solid rgba(178, 240, 232, 0.24);
+        }
+
+        .enter-btn {
+            display: inline-flex;
+            align-items: center; gap: 8px;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.86);
+            background: #ffffff;
+            color: #117c6f;
+            text-decoration: none;
+            box-shadow: 0 10px 24px rgba(3, 46, 41, 0.22);
+        }
+        .enter-btn:hover {
+            background: #b2f0e8;
+            border-color: #b2f0e8;
+            transform: translateX(4px);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-in { animation: fadeInUp 0.8s ease backwards; }
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+        .delay-4 { animation-delay: 0.8s; }
+
+        @media (max-width: 1023px) {
+            .access-cards { width: min(100%, 760px); }
+            .role-grid { width: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+
+        @media (max-width: 639px) {
+            .role-card,
+            .card-user {
+                min-height: auto;
+            }
+            .role-card p,
+            .card-user p,
+            .role-tags {
+                min-height: auto;
+            }
+            .role-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body class="gradient-bg min-h-[100dvh] flex flex-col items-center justify-start md:justify-center relative overflow-x-hidden px-4 py-12 md:py-8">
+
+    <!-- Floating Orbs -->
+    <div class="floating-orb orb-1"></div>
+    <div class="floating-orb orb-2"></div>
+    <div class="floating-orb orb-3"></div>
+
+    <!-- Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Header -->
+    <div class="text-center mb-12 relative z-10 animate-in">
+        <h1 class="text-5xl md:text-6xl font-extrabold text-white brand-glow tracking-tight mb-4">
+            WIECARA PPKPT
+        </h1>
+        <p class="text-white/60 text-lg md:text-xl font-light max-w-xl mx-auto leading-relaxed">
+            Satuan Tugas Pencegahan dan Penanganan<br class="hidden sm:block">
+            Kekerasan di Perguruan Tinggi
+        </p>
+        <div class="mt-4 inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-5 py-2 text-white/70 text-sm border border-white/10">
+            <i class="fas fa-university"></i>
+            <span>Telkom University Surabaya</span>
+        </div>
+    </div>
+
+    <!-- Subtitle -->
+    <p class="text-white/50 text-sm font-medium uppercase tracking-[0.2em] mb-8 relative z-10 animate-in delay-1">
+        Pilih Akses Dashboard
+    </p>
+
+    <!-- Role Cards -->
+    <div class="access-cards flex flex-col items-center gap-8 relative z-10">
+        <!-- First Row: User Card (Centered) -->
+        <div class="w-full flex justify-center">
+            <a href="pengguna.html" class="role-card card-user rounded-2xl p-8 cursor-pointer block animate-in delay-2">
+                <div class="flex flex-col items-center text-center">
+                    <div class="icon-ring user-ring mb-6">
+                        <i class="fas fa-users text-3xl role-icon-teal"></i>
+                    </div>
+                    <h3 class="text-white text-xl font-bold mb-2">Pengguna</h3>
+                    <p class="text-white/75 text-sm leading-relaxed mb-6">
+                        Akses landing page, buat laporan, monitoring progress, dan wawasan.
+                    </p>
+                    <div class="role-tags flex flex-wrap gap-2 justify-center mb-6">
+                        <span class="text-xs role-chip-teal px-3 py-1 rounded-full">Lapor</span>
+                        <span class="text-xs role-chip-teal px-3 py-1 rounded-full">Monitoring</span>
+                        <span class="text-xs role-chip-teal px-3 py-1 rounded-full">Wawasan</span>
+                    </div>
+                    <span class="enter-btn">
+                        Masuk <i class="fas fa-arrow-right text-xs"></i>
+                    </span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Second Row: Admin, Psikolog, Legal, Emergency (4 Cards) -->
+        <div class="role-grid">
+            <!-- Admin Card -->
+            <a href="Admin/pages/cases/cases.html" class="role-card card-admin rounded-2xl p-8 cursor-pointer block animate-in delay-3">
+                <div class="flex flex-col items-center text-center">
+                    <div class="icon-ring admin-ring mb-6">
+                        <i class="fas fa-user-shield text-3xl role-icon-teal"></i>
+                    </div>
+                    <h3 class="text-white text-xl font-bold mb-2">Administrator</h3>
+                    <p class="text-white/75 text-sm leading-relaxed mb-6">
+                        Kelola data kasus, jadwal konsultasi, statistik, dan konten blog.
+                    </p>
+                    <div class="role-tags flex flex-wrap gap-2 justify-center mb-6">
+                        <span class="text-xs role-chip-teal px-3 py-1 rounded-full">Data Kasus</span>
+                        <span class="text-xs role-chip-teal px-3 py-1 rounded-full">Statistik</span>
+                        <span class="text-xs role-chip-teal px-3 py-1 rounded-full">Blog</span>
+                    </div>
+                    <span class="enter-btn">
+                        Masuk <i class="fas fa-arrow-right text-xs"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Psikolog Card -->
+            <a href="Psikolog/pages/dashboard.html" class="role-card card-psikolog rounded-2xl p-8 cursor-pointer block animate-in delay-3">
+                <div class="flex flex-col items-center text-center">
+                    <div class="icon-ring psikolog-ring mb-6">
+                        <i class="fas fa-user-md text-3xl role-icon-teal"></i>
+                    </div>
+                    <h3 class="text-white text-xl font-bold mb-2">Psikolog</h3>
+                    <p class="text-white/75 text-sm leading-relaxed mb-6">
+                        Dashboard kasus, input catatan konsultasi, dan manajemen jadwal.
+                    </p>
+                    <div class="role-tags flex flex-wrap gap-2 justify-center mb-6">
+                        <span class="text-xs role-chip-teal px-3 py-1 rounded-full">Kasus Saya</span>
+                        <span class="text-xs role-chip-teal px-3 py-1 rounded-full">Catatan</span>
+                        <span class="text-xs role-chip-teal px-3 py-1 rounded-full">Jadwal</span>
+                    </div>
+                    <span class="enter-btn">
+                        Masuk <i class="fas fa-arrow-right text-xs"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Legal Support Card -->
+            <a href="Legal/pages/dashboard.html" class="role-card card-legal rounded-2xl p-8 cursor-pointer block animate-in delay-3">
+                <div class="flex flex-col items-center text-center">
+                    <div class="icon-ring legal-ring mb-6">
+                        <i class="fas fa-gavel text-3xl role-icon-teal"></i>
+                    </div>
+                    <h3 class="text-white text-xl font-bold mb-2">Pendamping Hukum</h3>
+                    <p class="text-white/75 text-sm leading-relaxed mb-6">
+                        Akses read-only laporan, audit trail blockchain, dan catatan hukum.
+                    </p>
+                    <div class="role-tags flex flex-wrap gap-2 justify-center mb-6">
+                        <span class="text-xs role-chip-teal px-3 py-1 rounded-full">Read-Only</span>
+                        <span class="text-xs role-chip-teal px-3 py-1 rounded-full">Audit Trail</span>
+                        <span class="text-xs role-chip-teal px-3 py-1 rounded-full">Analisis</span>
+                    </div>
+                    <span class="enter-btn">
+                        Masuk <i class="fas fa-arrow-right text-xs"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Pihak Berwajib (Emergency Responder) Card -->
+            <a href="Emergency/dashboard.html" class="role-card card-emergency rounded-2xl p-8 cursor-pointer block animate-in delay-4">
+                <div class="flex flex-col items-center text-center">
+                    <div class="icon-ring emergency-ring mb-6">
+                        <i class="fas fa-tower-broadcast text-3xl role-icon-teal"></i>
+                    </div>
+                    <h3 class="text-white text-xl font-bold mb-2">Pihak Berwajib</h3>
+                    <p class="text-white/75 text-sm leading-relaxed mb-6">
+                        Pos siaga polisi, damkar, dan responder untuk kasus darurat HIGH RISK.
+                    </p>
+                    <div class="role-tags flex flex-wrap gap-2 justify-center mb-6">
+                        <span class="text-xs role-chip-teal px-3 py-1 rounded-full">Darurat</span>
+                        <span class="text-xs role-chip-teal px-3 py-1 rounded-full">Lokasi Real-time</span>
+                        <span class="text-xs role-chip-teal px-3 py-1 rounded-full">Respons Cepat</span>
+                    </div>
+                    <span class="enter-btn">
+                        Masuk <i class="fas fa-arrow-right text-xs"></i>
+                    </span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-12 text-center text-white/30 text-xs relative z-10 animate-in delay-4">
+        <p>© 2026 Telkom University Surabaya — Demo Front-End Only</p>
+    </div>
+
+    <!-- Particle Generator -->
+    <script>
+        (function() {
+            const container = document.getElementById('particles');
+            for(let i = 0; i < 30; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.animationDuration = (10 + Math.random() * 20) + 's';
+                p.style.animationDelay = Math.random() * 15 + 's';
+                p.style.width = p.style.height = (2 + Math.random() * 3) + 'px';
+                container.appendChild(p);
+            }
+        })();
+    </script>
+</body>
+
+</html>

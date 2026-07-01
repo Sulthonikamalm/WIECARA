@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Dashboard Pendamping Hukum - WIECARA PPKPT">
+    <title>Dashboard Pendamping Hukum - WIECARA PPKPT</title>
+    <link rel="icon" type="image/png" href="../../Gambar/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="stylesheet" href="../assets/css/legal.css" />
+</head>
+
+<body class="legal-body">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <i class="fas fa-gavel"></i>
+                <span>WIECARA Legal</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <div class="sidebar-profile">
+            <div class="profile-avatar" id="profileAvatar">
+                <i class="fas fa-user-tie"></i>
+            </div>
+            <div class="profile-info">
+                <h4 id="profileName">Loading...</h4>
+                <span class="profile-role" id="profileSpecialization">Pendamping Hukum</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-link active" data-page="overview">
+                <i class="fas fa-th-large"></i>
+                <span>Overview</span>
+            </a>
+            <a href="#" class="nav-link" data-page="cases">
+                <i class="fas fa-folder-open"></i>
+                <span>Kasus Didampingi</span>
+            </a>
+            <a href="#" class="nav-link" data-page="audit">
+                <i class="fas fa-link"></i>
+                <span>Audit Trail</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="btn-logout" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Keluar</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Top Bar -->
+        <header class="topbar">
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h2 class="page-title" id="pageTitle">Overview</h2>
+            <div class="topbar-right">
+                <div class="blockchain-status" title="Sistem terhubung dengan pencatatan Audit Trail Immutable">
+                    <span class="pulse-dot"></span>
+                    <span>Secure Audit Node</span>
+                </div>
+                <span class="current-date" id="currentDate"></span>
+            </div>
+        </header>
+
+        <!-- Page: Overview -->
+        <section class="page-content active" id="page-overview">
+            <div class="stats-grid">
+                <div class="stat-card stat-legal">
+                    <div class="stat-icon"><i class="fas fa-folder-open"></i></div>
+                    <div class="stat-info">
+                        <h3 id="statTotal">0</h3>
+                        <p>Total Kasus Didampingi</p>
+                    </div>
+                </div>
+                <div class="stat-card stat-warning">
+                    <div class="stat-icon"><i class="fas fa-balance-scale"></i></div>
+                    <div class="stat-info">
+                        <h3 id="statAktif">0</h3>
+                        <p>Proses Bantuan Hukum</p>
+                    </div>
+                </div>
+                <div class="stat-card stat-success">
+                    <div class="stat-icon"><i class="fas fa-check-double"></i></div>
+                    <div class="stat-info">
+                        <h3 id="statSelesai">0</h3>
+                        <p>Kasus Selesai</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Legal Cases -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h3><i class="fas fa-list-ul"></i> Kasus Terbaru (Eskalasi)</h3>
+                </div>
+                <div class="cases-table-wrapper">
+                    <table class="cases-table" id="recentCasesTable">
+                        <thead>
+                            <tr>
+                                <th>Kode Laporan</th>
+                                <th>Consent Penyintas</th>
+                                <th>Risiko Psikolog</th>
+                                <th>Status Hukum</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentCasesBody">
+                            <tr>
+                                <td colspan="5" class="empty-state">
+                                    <i class="fas fa-gavel"></i>
+                                    <p>Belum ada kasus yang dieskalasi ke pendamping hukum</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Page: Cases -->
+        <section class="page-content" id="page-cases">
+            <div class="section-card">
+                <div class="section-header">
+                    <h3><i class="fas fa-folder-open"></i> Semua Kasus Pendampingan</h3>
+                </div>
+                <div class="cases-table-wrapper">
+                    <table class="cases-table" id="allCasesTable">
+                        <thead>
+                            <tr>
+                                <th>Kode Laporan</th>
+                                <th>Consent Tersimpan</th>
+                                <th>Hash Blockchain</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allCasesBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Page: Audit Trail global view -->
+        <section class="page-content" id="page-audit">
+            <div class="section-card">
+                <div class="section-header">
+                    <h3><i class="fas fa-link"></i> Log Audit Trail — Semua Kasus</h3>
+                </div>
+                <div class="cases-table-wrapper" style="padding: 20px 24px;">
+                    <div class="audit-ledger">
+                        <div class="ledger-header">
+                            <span>Aksi & Detail</span>
+                            <span>Waktu & Hash Verifikasi</span>
+                        </div>
+                        <div class="ledger-body" id="globalAuditList">
+                            <div class="empty-state" style="padding: 40px 20px;">
+                                <i class="fas fa-link"></i>
+                                <p>Pilih kasus untuk melihat audit trail</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modal: Complete Read-Only Legal View -->
+        <div class="modal-overlay" id="caseModal" style="display:none;">
+            <div class="modal-content modal-large">
+                <div class="modal-header header-legal">
+                    <div class="header-left" style="display: flex; align-items: center; gap: 15px;">
+                        <h3>Laporan #<span id="modalCode"></span> <small style="opacity:0.7; font-weight:400; font-size:0.85rem;">(Read-Only)</small></h3>
+                        <label class="redact-toggle" title="Sensor data sensitif (PII)">
+                            <input type="checkbox" id="redactToggle">
+                            <span class="toggle-slider"></span>
+                            <span class="toggle-label"><i class="fas fa-eye-slash"></i> Mode Sensor</span>
+                        </label>
+                    </div>
+                    <button class="modal-close" id="modalClose" aria-label="Tutup modal"><i class="fas fa-times"></i></button>
+                </div>
+
+                <!-- Consent Verification Banner -->
+                <div class="consent-banner" id="consentBanner">
+                    <i class="fas fa-shield-alt consent-icon"></i>
+                    <div class="consent-info">
+                        <h4>Consent Terverifikasi</h4>
+                        <p id="consentText">Penyintas telah memberikan persetujuan eksplisit untuk membuka data ini.</p>
+                        <small>Immutable Hash: <span class="hash-text" id="consentHash"></span></small>
+                    </div>
+                </div>
+
+                <div class="modal-body" id="modalBody">
+                    <div class="modal-tabs">
+                        <button class="tab-btn active" data-tab="detail">
+                            <i class="fas fa-info-circle"></i> Info Laporan
+                        </button>
+                        <button class="tab-btn" data-tab="psikolog">
+                            <i class="fas fa-user-md"></i> Catatan Psikolog
+                        </button>
+                        <button class="tab-btn" data-tab="audit">
+                            <i class="fas fa-link"></i> Audit Trail
+                        </button>
+                        <button class="tab-btn" data-tab="analysis">
+                            <i class="fas fa-pen-fancy"></i> Analisis Hukum
+                        </button>
+                    </div>
+
+                    <!-- Tab: Detail -->
+                    <div class="tab-content active" id="tab-detail">
+                        <div class="detail-grid" id="caseDetailGrid"></div>
+                    </div>
+
+                    <!-- Tab: Catatan Psikolog -->
+                    <div class="tab-content" id="tab-psikolog">
+                        <div class="psikolog-notes-container" id="psikologNotesContainer"></div>
+                    </div>
+
+                    <!-- Tab: Audit Trail (Immutable) -->
+                    <div class="tab-content" id="tab-audit">
+                        <div class="audit-ledger">
+                            <div class="ledger-header">
+                                <span>Aksi & Detail</span>
+                                <span>Waktu & Hash Verifikasi</span>
+                            </div>
+                            <div class="ledger-body" id="auditTrailList"></div>
+                        </div>
+                    </div>
+
+                    <!-- Tab: Analisis Hukum -->
+                    <div class="tab-content" id="tab-analysis">
+                        <form id="legalAnalysisForm" class="legal-form">
+                            <div class="form-group">
+                                <label><i class="fas fa-search"></i> Analisis Hukum</label>
+                                <textarea id="legalAnalysis" rows="4" placeholder="Ketik hasil tinjauan hukum atas kasus ini..." required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-balance-scale-right"></i> Rekomendasi Hukum</label>
+                                <textarea id="legalRecommendation" rows="3" placeholder="Saran mediasi, pelaporan, dll..." required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-book"></i> Pasal Terkait (Opsional)</label>
+                                <textarea id="pasalTerkait" rows="2" placeholder="Sebutkan pasal-pasal relevan..."></textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-submit legal-btn">
+                                    <i class="fas fa-save"></i> Simpan Analisis
+                                </button>
+                            </div>
+                        </form>
+                        <div id="savedAnalysisContainer" style="display:none;" class="saved-analysis"></div>
+                        
+                        <div class="doc-generator-actions" style="margin-top: 25px; display: flex; gap: 10px; border-top: 1px solid var(--legal-border-light); padding-top: 20px;">
+                            <button class="btn-action doc-btn" id="btnCetakBAP" style="flex:1; background: var(--legal-success-bg); color: #065f46; border: 1px solid rgba(16,185,129,0.2);">
+                                <i class="fas fa-file-pdf"></i> Cetak BAP Internal
+                            </button>
+                            <button class="btn-action doc-btn" id="btnCetakSomasi" style="flex:1; background: #fffcf0; color: #92400e; border: 1px solid rgba(245,158,11,0.2);">
+                                <i class="fas fa-envelope-open-text"></i> Buat Draft Somasi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Hidden Print Area for Legal Document Generator -->
+    <div id="printArea" class="print-only"></div>
+
+    <script src="../assets/js/legal.js?v=20260430"></script>
+</body>
+
+</html>
