@@ -1,12 +1,11 @@
 document.addEventListener('DOMContentLoaded', async function () {
-    // Auth Check & Data Fetching
+    // Auth check removed — demo front-end only
     try {
         const authRes = await fetch('../../api/psikolog/get_cases.php');
         const result = await authRes.json();
         
         if (result.status !== 'success') {
-            window.location.href = 'login.html';
-            return;
+            console.warn('API not available — demo mode');
         }
 
         const myCases = result.data.cases;
@@ -107,10 +106,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (sidebarToggle) sidebarToggle.addEventListener('click', () => sidebar.classList.toggle('collapsed'));
         if (mobileToggle) mobileToggle.addEventListener('click', () => sidebar.classList.toggle('mobile-open'));
 
-        // Logout
+        // Logout — redirect to index
         document.getElementById('logoutBtn')?.addEventListener('click', async () => {
-            await fetch('../../api/psikolog/logout.php');
-            window.location.href = 'login.html';
+            try { await fetch('../../api/psikolog/logout.php'); } catch(e) {}
+            window.location.href = '../../index.html';
         });
 
         // Modal functionality
@@ -278,7 +277,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     } catch (e) {
         console.error('Failed to load dashboard data', e);
-        window.location.href = 'login.html';
+        // Demo mode — stay on page instead of redirecting to login
     }
 
     function renderCasesTable(tbodyId, cases) {

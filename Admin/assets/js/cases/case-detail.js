@@ -1,16 +1,5 @@
 document.addEventListener('DOMContentLoaded', async function () {
-    // Auth Check
-    try {
-        const authRes = await fetch('../../../api/auth/check.php');
-        const authData = await authRes.json();
-        if (authData.status !== 'authenticated') {
-            window.location.href = '../auth/login.html';
-            return;
-        }
-    } catch (e) {
-        window.location.href = '../auth/login.html';
-        return;
-    }
+    // Auth check removed — demo front-end only
 
     const urlParams = new URLSearchParams(window.location.search);
     const caseId = urlParams.get('id');

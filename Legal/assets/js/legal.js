@@ -44,20 +44,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     /* =============================================
        AUTH CHECK & DATA LOAD
        ============================================= */
+    // Auth check removed — demo front-end only
     try {
         const casesRes = await fetch('../../api/legal/get_cases.php');
         const casesData = await casesRes.json();
 
         if (casesData.status !== 'success') {
-            window.location.href = 'login.html';
-            return;
+            console.warn('API not available — demo mode');
+        } else {
+            currentLegalCases = casesData.data.cases;
         }
-
-        currentLegalCases = casesData.data.cases;
     } catch (e) {
         console.error('Failed to load legal dashboard', e);
-        window.location.href = 'login.html';
-        return;
+        // Demo mode — stay on page instead of redirecting to login
     }
 
     /* =============================================
@@ -430,8 +429,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (DOM.btnLogout) {
             DOM.btnLogout.addEventListener('click', async () => {
-                await fetch('../../api/legal/logout.php');
-                window.location.href = 'login.html';
+                try { await fetch('../../api/legal/logout.php'); } catch(e) {}
+                window.location.href = '../../index.html';
             });
         }
 

@@ -7,18 +7,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     if (rawStorage) rawStorage.style.display = 'none';
 
-    // Auth Check
-    try {
-        const authRes = await fetch('../../../api/auth/check.php');
-        const authData = await authRes.json();
-        if (authData.status !== 'authenticated') {
-            window.location.href = '../auth/login.html';
-            return;
-        }
-    } catch (e) {
-        window.location.href = '../auth/login.html';
-        return;
-    }
+    // Auth check removed — demo front-end only
 
     // Tab switching
     document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -102,8 +91,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     const btnLogout = document.getElementById('btnLogout');
     if (btnLogout) {
         btnLogout.addEventListener('click', async () => {
-            await fetch('../../../api/auth/logout.php');
-            window.location.href = '../auth/login.html';
+            try { await fetch('../../../api/auth/logout.php'); } catch(e) {}
+            window.location.href = '../../../index.html';
         });
     }
 });
